@@ -2,7 +2,7 @@
   "name": "12周居家训练计划",
   "short_name": "居家训练",
   "description": "改善肩颈、综合体能提升的12周居家训练方案",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#FAF8F5",
   "theme_color": "#7DA97C",

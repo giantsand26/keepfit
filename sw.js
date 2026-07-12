@@ -1,16 +1,16 @@
 const CACHE = 'workout-app-v3';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/css/style.css',
-  '/js/app.js',
-  '/js/data.js',
-  '/js/nutrition.js',
-  '/js/illustrations.js',
-  '/js/timer.js',
-  '/js/storage.js',
-  '/manifest.json',
-  '/icons/icon-192.svg'
+  './',
+  './index.html',
+  './css/style.css',
+  './js/app.js',
+  './js/data.js',
+  './js/nutrition.js',
+  './js/illustrations.js',
+  './js/timer.js',
+  './js/storage.js',
+  './manifest.json',
+  './icons/icon-192.svg'
 ];
 
 self.addEventListener('install', e => {
