@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>居家训练 - 界面预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:        #FAF8F5;
+    --card:      #FFFFFF;
+    --text:      #3D3929;
+    --text2:     #8B866E;
+    --accent:    #7DA97C;
+    --accent-warm: #D4A76A;
+    --accent-soft: #C9D5C4;
+    --danger:    #D4706A;
+    --border:    #E8E4DB;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(61,57,41,0.06);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #E8E4DB;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: var(--bg);
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 2px #333;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Screen container */
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px 100px;
+    scroll-behavior: smooth;
+  }
+
+  .screen-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    font-family: Georgia, "Songti SC", "Noto Serif SC", serif;
+    margin-bottom: 4px;
+  }
+  .screen-subtitle {
+    font-size: 14px;
+    color: var(--text2);
+    margin-bottom: 20px;
+  }
+
+  /* Section */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 0 12px;
+  }
+  .section-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: Georgia, "Songti SC", serif;
+  }
+  .section-header span {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  /* Today summary card */
+  .today-card {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 20px;
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(125,169,124,0.25);
+  }
+  .today-card .day-label {
+    font-size: 12px;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .today-card .day-title {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: Georgia, "Songti SC", serif;
+    margin-bottom: 2px;
+  }
+  .today-card .day-theme {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 12px;
+  }
+  .today-card .stats-row {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    opacity: 0.85;
+  }
+  .today-card .stats-row strong { font-size: 15px; font-weight: 600; }
+
+  /* Exercise card */
+  .exercise-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .exercise-illustration {
+    width: 72px;
+    height: 72px;
+    background: var(--accent-soft);
+    border-radius: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .exercise-illustration svg {
+    width: 64px;
+    height: 64px;
+  }
+  .exercise-info { flex: 1; min-width: 0; }
+  .exercise-info .ex-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .exercise-info .ex-meta {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .exercise-info .ex-meta span {
+    display: inline-block;
+    background: var(--bg);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-right: 4px;
+    margin-bottom: 3px;
+    font-size: 11px;
+    font-family: "SF Mono", "Menlo", monospace;
+  }
+  .timer-badge {
+    background: var(--accent-warm);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+    font-family: -apple-system, sans-serif;
+  }
+
+  /* Diet card */
+  .meal-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .meal-icon.breakfast { background: #FFF3E0; }
+  .meal-icon.lunch { background: #E8F5E9; }
+  .meal-icon.dinner { background: #F3E5F5; }
+  .meal-icon.snack { background: #FFF8E1; }
+  .meal-detail { flex: 1; }
+  .meal-detail .meal-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .meal-detail .meal-food { font-size: 12px; color: var(--text2); margin-top: 2px; line-height: 1.4; }
+  .meal-detail .meal-kcal { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* Info chips */
+  .info-chips {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+  }
+  .chip .chip-icon { font-size: 18px; flex-shrink: 0; }
+  .chip .chip-val { font-weight: 700; font-size: 15px; }
+  .chip .chip-label { font-size: 10px; color: var(--text2); }
+
+  /* Water progress */
+  .water-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .water-bar .fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 22px;
+    z-index: 10;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: var(--text2);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: -apple-system, sans-serif;
+  }
+  .nav-item.active { color: var(--accent); font-weight: 600; }
+  .nav-item .nav-icon { font-size: 20px; }
+
+  /* Section divider */
+  .divider {
+    text-align: center;
+    padding: 28px 0 12px;
+    font-size: 13px;
+    color: var(--text2);
+    font-family: Georgia, "Songti SC", serif;
+    letter-spacing: 1px;
+  }
+
+  /* Screen Navigation */
+  .screen-nav {
+    display: flex;
+    gap: 8px;
+    margin: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .screen-nav button {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    font-family: -apple-system, sans-serif;
+  }
+  .screen-nav button:hover { background: var(--accent-soft); }
+
+  .all-screens { display: flex; flex-direction: column; gap: 40px; }
+
+  /* Checkbox */
+  .checkbox {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .checkbox.done { background: var(--accent); border-color: var(--accent); }
+  .checkbox.done::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 700; }
+
+  /* Sleep chip */
+  .sleep-hint {
+    background: #EDE7F6;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: #5E4B7A;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* Progress card */
+  .progress-row {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding: 8px 0;
+  }
+  .progress-item .p-val {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: Georgia, serif;
+  }
+  .progress-item .p-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* Week grid */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .week-cell {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+  }
+  .week-cell.done { background: #7DA97C; color: #fff; }
+  .week-cell.partial { background: #C9D5C4; color: #3D3929; }
+  .week-cell.rest { background: #E8E4DB; color: #8B866E; }
+  .week-cell.missed { background: #F5E0DD; color: #D4706A; }
+
+  /* Exercise Detail Modal */
+  .modal-overlay {
+    position: fixed; top:0;left:0;right:0;bottom:0;
+    background: rgba(61,57,41,0.5);
+    z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .modal-sheet {
+    background: var(--bg);
+    border-radius: 20px 20px 0 0;
+    width: 390px; max-height: 80vh;
+    overflow-y: auto;
+    padding: 8px 20px 30px;
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.12);
+    animation: slideUp 0.25s ease-out;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 8px auto 16px;
+  }
+  .modal-title {
+    font-size: 20px; font-weight: 700; color: var(--text);
+    font-family: Georgia, "Songti SC", serif;
+    margin-bottom: 4px;
+  }
+  .modal-category {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  .modal-illustration-lg {
+    width: 100%; height: 140px;
+    background: var(--accent-soft);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .modal-illustration-lg svg {
+    width: 120px; height: 120px;
+  }
+  .modal-section {
+    margin-bottom: 16px;
+  }
+  .modal-section h4 {
+    font-size: 14px; font-weight: 700; color: var(--text);
+    margin-bottom: 6px;
+    font-family: Georgia, "Songti SC", serif;
+  }
+  .modal-section .step {
+    display: flex; gap: 10px; margin-bottom: 8px;
+    font-size: 13px; color: var(--text); line-height: 1.5;
+  }
+  .modal-section .step-num {
+    width: 20px; height: 20px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .tip-box {
+    background: #FFF8E1; border-radius: 10px;
+    padding: 12px 14px; font-size: 12px; color: #8B6F2A;
+    line-height: 1.5; margin-bottom: 8px;
+  }
+  .tip-box strong { color: #C79100; }
+  .mistake-box {
+    background: #FFEBEE; border-radius: 10px;
+    padding: 12px 14px; font-size: 12px; color: #A84840;
+    line-height: 1.5; margin-bottom: 8px;
+  }
+  .mistake-box strong { color: #D4706A; }
+  .modal-close {
+    width: 100%; padding: 12px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; font-size: 14px; font-weight: 600;
+    color: var(--text); cursor: pointer;
+    font-family: -apple-system, sans-serif;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>📶 🔋 85%</span>
+  </div>
+
+  <!-- All Screens Container -->
+  <div class="screen" id="screen-container"></div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="scrollToScreen('today')">
+      <span class="nav-icon">📋</span> 今日
+    </button>
+    <button class="nav-item" onclick="scrollToScreen('week')">
+      <span class="nav-icon">📅</span> 周计划
+    </button>
+    <button class="nav-item" onclick="scrollToScreen('diet')">
+      <span class="nav-icon">🥗</span> 饮食
+    </button>
+    <button class="nav-item" onclick="scrollToScreen('progress')">
+      <span class="nav-icon">📊</span> 进度
+    </button>
+    <button class="nav-item" onclick="scrollToScreen('settings')">
+      <span class="nav-icon">⚙️</span> 设置
+    </button>
+  </div>
+
+  <!-- Exercise Detail Modal (hidden by default) -->
+  <div id="exercise-modal" style="display:none" onclick="if(event.target===this)closeModal()">
+    <div class="modal-sheet" id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// === SIMPLE SVG STICK FIGURES ===
+function wallAngelSVG() {
+  return `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Wall -->
+    <line x1="8" y1="2" x2="8" y2="62" stroke="#C9D5C4" stroke-width="2" stroke-dasharray="3,2"/>
+    <!-- Body -->
+    <circle cx="22" cy="14" r="5" fill="none" stroke="#3D3929" stroke-width="2"/>
+    <line x1="22" y1="19" x2="22" y2="42" stroke="#3D3929" stroke-width="2.5"/>
+    <!-- Arms up (angel position) -->
+    <line x1="22" y1="24" x2="10" y2="14" stroke="#3D3929" stroke-width="2"/>
+    <line x1="10" y1="14" x2="10" y2="6" stroke="#3D3929" stroke-width="2"/>
+    <line x1="22" y1="24" x2="34" y2="14" stroke="#3D3929" stroke-width="2"/>
+    <line x1="34" y1="14" x2="34" y2="6" stroke="#3D3929" stroke-width="2"/>
+    <!-- Joints -->
+    <circle cx="22" cy="24" r="1.5" fill="#D4706A"/>
+    <circle cx="10" cy="14" r="1.5" fill="#D4706A"/>
+    <circle cx="34" cy="14" r="1.5" fill="#D4706A"/>
+    <!-- Arrows -->
+    <path d="M10 8 L10 4 M8 5 L10 2 L12 5" stroke="#D4A76A" stroke-width="1.2" fill="none"/>
+    <path d="M34 8 L34 4 M32 5 L34 2 L36 5" stroke="#D4A76A" stroke-width="1.2" fill="none"/>
+  </svg>`;
+}
+
+function squatSVG() {
+  return `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="10" r="5" fill="none" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="15" x2="32" y2="30" stroke="#3D3929" stroke-width="2.5"/>
+    <!-- Arms forward -->
+    <line x1="32" y1="20" x2="22" y2="26" stroke="#3D3929" stroke-width="2"/>
+    <line x1="22" y1="26" x2="16" y2="22" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="20" x2="42" y2="26" stroke="#3D3929" stroke-width="2"/>
+    <line x1="42" y1="26" x2="48" y2="22" stroke="#3D3929" stroke-width="2"/>
+    <!-- Legs (squat position) -->
+    <line x1="32" y1="30" x2="22" y2="48" stroke="#3D3929" stroke-width="2"/>
+    <line x1="22" y1="48" x2="16" y2="56" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="30" x2="42" y2="48" stroke="#3D3929" stroke-width="2"/>
+    <line x1="42" y1="48" x2="48" y2="56" stroke="#3D3929" stroke-width="2"/>
+    <!-- Joints -->
+    <circle cx="32" cy="30" r="1.5" fill="#D4706A"/>
+    <circle cx="22" cy="48" r="1.5" fill="#D4706A"/>
+    <circle cx="42" cy="48" r="1.5" fill="#D4706A"/>
+    <!-- Arrow -->
+    <path d="M32 44 L32 52 M30 49 L32 52 L34 49" stroke="#D4A76A" stroke-width="1.2" fill="none"/>
+  </svg>`;
+}
+
+function gluteBridgeSVG() {
+  return `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Floor -->
+    <line x1="6" y1="50" x2="58" y2="50" stroke="#C9D5C4" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- Body in bridge -->
+    <circle cx="32" cy="22" r="4.5" fill="none" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="26.5" x2="32" y2="38" stroke="#3D3929" stroke-width="2.5"/>
+    <!-- Upper arms on floor -->
+    <line x1="32" y1="30" x2="22" y2="40" stroke="#3D3929" stroke-width="2"/>
+    <line x1="22" y1="40" x2="18" y2="48" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="30" x2="42" y2="40" stroke="#3D3929" stroke-width="2"/>
+    <line x1="42" y1="40" x2="46" y2="48" stroke="#3D3929" stroke-width="2"/>
+    <!-- Legs -->
+    <line x1="32" y1="38" x2="24" y2="48" stroke="#3D3929" stroke-width="2"/>
+    <line x1="24" y1="48" x2="20" y2="50" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="38" x2="40" y2="48" stroke="#3D3929" stroke-width="2"/>
+    <line x1="40" y1="48" x2="44" y2="50" stroke="#3D3929" stroke-width="2"/>
+    <!-- Hip highlight -->
+    <circle cx="32" cy="38" r="2" fill="#7DA97C" opacity="0.6"/>
+    <!-- Arrow -->
+    <path d="M32 28 L32 20 M30 23 L32 20 L34 23" stroke="#D4A76A" stroke-width="1.2" fill="none"/>
+  </svg>`;
+}
+
+function deadBugSVG() {
+  return `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Floor -->
+    <line x1="6" y1="50" x2="58" y2="50" stroke="#C9D5C4" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <circle cx="32" cy="24" r="4.5" fill="none" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="28.5" x2="32" y2="42" stroke="#3D3929" stroke-width="2.5"/>
+    <!-- Arms up -->
+    <line x1="32" y1="33" x2="22" y2="26" stroke="#3D3929" stroke-width="2"/>
+    <line x1="22" y1="26" x2="14" y2="28" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="33" x2="42" y2="26" stroke="#3D3929" stroke-width="2"/>
+    <line x1="42" y1="26" x2="50" y2="28" stroke="#3D3929" stroke-width="2"/>
+    <!-- Legs up -->
+    <line x1="32" y1="42" x2="26" y2="34" stroke="#3D3929" stroke-width="2"/>
+    <line x1="26" y1="34" x2="30" y2="30" stroke="#3D3929" stroke-width="2"/>
+    <line x1="32" y1="42" x2="38" y2="34" stroke="#3D3929" stroke-width="2"/>
+    <line x1="38" y1="34" x2="34" y2="30" stroke="#3D3929" stroke-width="2"/>
+    <!-- Core highlight -->
+    <circle cx="32" cy="37" r="3" fill="#7DA97C" opacity="0.4"/>
+  </svg>`;
+}
+
+function catCowSVG() {
+  return `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="18" r="4.5" fill="none" stroke="#3D3929" stroke-width="2"/>
+    <!-- Spine curved -->
+    <path d="M28 24 Q20 32 22 42" stroke="#3D3929" stroke-width="2.5" fill="none"/>
+    <path d="M36 24 Q44 32 42 42" stroke="#3D3929" stroke-width="2.5" fill="none"/>
+    <line x1="22" y1="42" x2="32" y2="44" stroke="#3D3929" stroke-width="2.5"/>
+    <line x1="42" y1="42" x2="32" y2="44" stroke="#3D3929" stroke-width="2.5"/>
+    <!-- Arms on floor -->
+    <line x1="26" y1="28" x2="18" y2="44" stroke="#3D3929" stroke-width="2"/>
+    <line x1="18" y1="44" x2="14" y2="54" stroke="#3D3929" stroke-width="2"/>
+    <line x1="38" y1="28" x2="46" y2="44" stroke="#3D3929" stroke-width="2"/>
+    <line x1="46" y1="44" x2="50" y2="54" stroke="#3D3929" stroke-width="2"/>
+    <!-- Legs -->
+    <line x1="28" y1="42" x2="24" y2="54" stroke="#3D3929" stroke-width="2"/>
+    <line x1="36" y1="42" x2="40" y2="54" stroke="#3D3929" stroke-width="2"/>
+    <!-- Arrow arching -->
+    <path d="M14 20 Q32 10 50 20" stroke="#D4A76A" stroke-width="1.2" fill="none" stroke-dasharray="2,2"/>
+    <path d="M48 22 L50 20 L48 18" stroke="#D4A76A" stroke-width="1.2" fill="none"/>
+  </svg>`;
+}
+
+// === SCREENS ===
+function renderScreen1() {
+  return `
+    <div class="today-card">
+      <div class="day-label">2026年7月14日 周一</div>
+      <div class="day-title">体态纠正日</div>
+      <div class="day-theme">阶段一 · 第 2 周</div>
+      <div class="stats-row">
+        <div><strong>4</strong> 动作</div>
+        <div><strong>10</strong> 分钟</div>
+        <div><strong>~50</strong> kcal</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h3>🏋️ 今日训练</h3>
+      <span>点击动作开始计时休息</span>
+    </div>
+
+    <div class="card exercise-card" onclick="openExercise('wall-angel')" style="cursor:pointer">
+      <div class="exercise-illustration">${wallAngelSVG()}</div>
+      <div class="exercise-info">
+        <div class="ex-name">靠墙天使</div>
+        <div class="ex-meta">
+          <span>3组</span><span>10次</span><span>休30s</span>
+        </div>
+      </div>
+      <button class="timer-badge" style="background:#7DA97C" onclick="event.stopPropagation()">▶ 计时</button>
+    </div>
+
+    <div class="card exercise-card" onclick="openExercise('chest-stretch')" style="cursor:pointer">
+      <div class="exercise-illustration">${catCowSVG()}</div>
+      <div class="exercise-info">
+        <div class="ex-name">门框胸肌拉伸</div>
+        <div class="ex-meta">
+          <span>2组</span><span>每侧30s</span><span>休0s</span>
+        </div>
+      </div>
+      <button class="timer-badge" style="background:#7DA97C" onclick="event.stopPropagation()">▶ 计时</button>
+    </div>
+
+    <div class="card exercise-card" onclick="openExercise('ytw')" style="cursor:pointer">
+      <div class="exercise-illustration">${wallAngelSVG()}</div>
+      <div class="exercise-info">
+        <div class="ex-name">俯卧 Y-T-W 字</div>
+        <div class="ex-meta">
+          <span>3组</span><span>每字5次</span><span>休30s</span>
+        </div>
+      </div>
+      <button class="timer-badge" style="background:#7DA97C" onclick="event.stopPropagation()">▶ 计时</button>
+    </div>
+
+    <div class="card exercise-card" onclick="openExercise('dead-bug')" style="cursor:pointer">
+      <div class="exercise-illustration">${deadBugSVG()}</div>
+      <div class="exercise-info">
+        <div class="ex-name">死虫式</div>
+        <div class="ex-meta">
+          <span>3组</span><span>每侧10次</span><span>休30s</span>
+        </div>
+      </div>
+      <button class="timer-badge" style="background:#7DA97C" onclick="event.stopPropagation()">▶ 计时</button>
+    </div>
+
+    <!-- Daily Activity Section -->
+    <div class="section-header" style="margin-top:8px">
+      <h3>🚶 今日活动</h3>
+      <span>工作日 · 通勤嵌入</span>
+    </div>
+
+    <div class="card">
+      <div class="meal-row" style="border-bottom:1px solid var(--border)">
+        <div class="meal-icon" style="background:#E3F2FD">🚴</div>
+        <div class="meal-detail">
+          <div class="meal-name">骑行通勤</div>
+          <div class="meal-food">早晚各 10 分钟 · 地铁站接驳</div>
+          <div class="meal-kcal">两趟共 20 分钟 · ~120 kcal</div>
+        </div>
+        <div class="checkbox"></div>
+      </div>
+      <div class="meal-row" style="border-bottom:1px solid var(--border)">
+        <div class="meal-icon" style="background:#E8F5E9">🚶</div>
+        <div class="meal-detail">
+          <div class="meal-name">步行（地铁衔接）</div>
+          <div class="meal-food">出站到公司 · 每天来回各步行 10-15 分钟</div>
+          <div class="meal-kcal">两趟共 ~25 分钟 · ~90 kcal</div>
+        </div>
+        <div class="checkbox"></div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-icon" style="background:#FFF3E0">🪜</div>
+        <div class="meal-detail">
+          <div class="meal-name">跨步爬楼</div>
+          <div class="meal-food">上下班不坐电梯 · 一次跨两级台阶</div>
+          <div class="meal-kcal">每天累计 ~5 分钟 · ~50 kcal</div>
+        </div>
+        <div class="checkbox"></div>
+      </div>
+    </div>
+
+    <!-- Cycling posture reminder -->
+    <div class="sleep-hint" style="background:#E3F2FD;color:#3A5A7C;margin-top:12px">
+      🚴 <strong>骑行姿势提醒</strong><br>
+      调高座垫 · 手肘微弯不耸肩 · 肩胛微微后缩<br>
+      10分钟是安全线——超过15分钟注意检查姿势
+    </div>
+
+    <div style="text-align:center;margin:20px 0">
+      <button style="
+        background:var(--accent);color:#fff;border:none;
+        padding:14px 48px;border-radius:28px;font-size:16px;font-weight:600;
+        box-shadow:0 4px 14px rgba(125,169,124,0.35);
+        cursor:pointer;font-family:-apple-system,sans-serif;
+      ">✅ 完成今日训练</button>
+    </div>
+  `;
+}
+
+function renderScreen2() {
+  return `
+    <div class="screen-title">周计划</div>
+    <div class="screen-subtitle">12周训练总览</div>
+
+    <div style="display:flex;gap:8px;margin-bottom:16px;align-items:center">
+      <button style="border:1px solid var(--border);background:var(--card);border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer">◀</button>
+      <span style="font-weight:700;font-size:16px;color:var(--text);font-family:Georgia,serif">第 2 周</span>
+      <button style="border:1px solid var(--border);background:var(--card);border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer">▶</button>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px">本周（7/14 - 7/20）</div>
+      <div class="week-grid">
+        <div style="font-size:10px;color:var(--text2);text-align:center">一</div>
+        <div style="font-size:10px;color:var(--text2);text-align:center">二</div>
+        <div style="font-size:10px;color:var(--text2);text-align:center">三</div>
+        <div style="font-size:10px;color:var(--text2);text-align:center">四</div>
+        <div style="font-size:10px;color:var(--text2);text-align:center">五</div>
+        <div style="font-size:10px;color:var(--text2);text-align:center">六</div>
+        <div style="font-size:10px;color:var(--text2);text-align:center">日</div>
+        <div class="week-cell done">✓</div>
+        <div class="week-cell" style="border:2px solid var(--accent);color:var(--accent);font-weight:700">今</div>
+        <div class="week-cell" style="color:var(--text2)">三</div>
+        <div class="week-cell" style="color:var(--text2)">四</div>
+        <div class="week-cell" style="color:var(--text2)">五</div>
+        <div class="week-cell rest">休</div>
+        <div class="week-cell rest">休</div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:10px;font-size:10px;color:var(--text2);justify-content:center">
+        <span>🟢 完成</span><span>⚪ 待练</span><span>⬜ 休息</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">📈 12 周进度热力图</div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:3px">
+        ${Array.from({length:12}, (_,w) => `
+          <div>
+            <div style="font-size:8px;color:var(--text2);text-align:center;margin-bottom:2px">W${w+1}</div>
+            ${Array.from({length:7}, (_,d) => {
+              let cls = 'week-cell';
+              if (w===0 && d===0) cls += ' done';
+              else if (w===1 && d<=1) cls += ' done';
+              else if (w===1 && d===1) cls = 'week-cell';
+              else if (d>=5) cls += ' rest';
+              return `<div class="${cls}" style="font-size:8px"></div>`;
+            }).join('')}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderScreen3() {
+  return `
+    <div class="screen-title">今日饮食</div>
+    <div class="screen-subtitle">阶段一 · 日目标 1550 kcal · 蛋白质 65g</div>
+
+    <!-- Nutrition targets -->
+    <div class="info-chips">
+      <div class="chip">
+        <span class="chip-icon">🔥</span>
+        <div><div class="chip-val">0</div><div class="chip-label">/ 1550 kcal</div></div>
+      </div>
+      <div class="chip">
+        <span class="chip-icon">🥩</span>
+        <div><div class="chip-val">0</div><div class="chip-label">/ 65g 蛋白质</div></div>
+      </div>
+    </div>
+
+    <div class="info-chips">
+      <div class="chip">
+        <span class="chip-icon">☕</span>
+        <div>
+          <div class="chip-val">0-1</div>
+          <div class="chip-label">/ 2 杯咖啡</div>
+          <div style="font-size:10px;color:var(--text2);margin-top:2px">下午3点前</div>
+        </div>
+      </div>
+      <div class="chip">
+        <span class="chip-icon">💧</span>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;justify-content:space-between">
+            <span class="chip-val">0.8L</span>
+            <span class="chip-label">/ 1.6L</span>
+          </div>
+          <div class="water-bar"><div class="fill" style="width:50%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sleep chip -->
+    <div class="sleep-hint">
+      😴 <strong>今晚目标睡眠：≥ 7 小时</strong><br>
+      减脂期睡眠不足 → 第二天食欲失控。建议 23:00 前入睡。
+    </div>
+
+    <!-- Meals -->
+    <div class="section-header">
+      <h3>🍽️ 今日餐食</h3>
+      <span>周一 · 训练日</span>
+    </div>
+
+    <div class="card">
+      <div class="meal-row">
+        <div class="meal-icon breakfast">🥣</div>
+        <div class="meal-detail">
+          <div class="meal-name">早餐 7:00-8:30</div>
+          <div class="meal-food">蒸红薯 1个 · 煮鸡蛋 2个</div>
+          <div class="meal-kcal">~350 kcal · 蛋白质 15g</div>
+        </div>
+        <div class="checkbox done"></div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-icon lunch">🍱</div>
+        <div class="meal-detail">
+          <div class="meal-name">午餐 12:00-13:00</div>
+          <div class="meal-food">半碗米饭 · 鸡胸肉炒西兰花 · 凉拌豆角</div>
+          <div class="meal-kcal">~500 kcal · 蛋白质 26g</div>
+        </div>
+        <div class="checkbox"></div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-icon dinner">🍽️</div>
+        <div class="meal-detail">
+          <div class="meal-name">晚餐 18:00-19:00</div>
+          <div class="meal-food">老豆腐炖白菜 · 菌菇汤（无主食）</div>
+          <div class="meal-kcal">~400 kcal · 蛋白质 22g</div>
+        </div>
+        <div class="checkbox"></div>
+      </div>
+      <div class="meal-row">
+        <div class="meal-icon snack">🥛</div>
+        <div class="meal-detail">
+          <div class="meal-name">加餐 训练后30分钟内</div>
+          <div class="meal-food">无糖酸奶 200g</div>
+          <div class="meal-kcal">~120 kcal · 蛋白质 8g</div>
+        </div>
+        <div class="checkbox"></div>
+      </div>
+    </div>
+
+    <!-- Coffee note -->
+    <div class="card" style="margin-top:12px">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">☕ 咖啡建议</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">
+        美式加冰 · 1-2杯/天<br>
+        时间窗口 <strong>7:00 - 15:00</strong><br>
+        先吃早餐再喝咖啡 · 下午3点后换成温水
+      </div>
+    </div>
+  `;
+}
+
+function renderScreen4() {
+  return `
+    <div class="screen-title">进度</div>
+    <div class="screen-subtitle">第 2 周 · 7月14日-7月20日</div>
+
+    <div class="card">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px">📊 本周统计</div>
+      <div class="progress-row">
+        <div class="progress-item">
+          <div class="p-val">4/5</div>
+          <div class="p-label">训练完成</div>
+        </div>
+        <div class="progress-item">
+          <div class="p-val">53.6</div>
+          <div class="p-label">体重 kg</div>
+        </div>
+        <div class="progress-item">
+          <div class="p-val">71</div>
+          <div class="p-label">腰围 cm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Summary Card -->
+    <div class="card" style="margin-top:12px;border:2px solid var(--accent);background:#F8FAF6">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-size:14px;font-weight:700;color:var(--accent);font-family:Georgia,serif">📋 周反馈摘要</div>
+        <span style="font-size:11px;color:var(--text2)">自动生成</span>
+      </div>
+
+      <!-- Auto-generated stats -->
+      <div style="background:var(--card);border-radius:10px;padding:14px;font-size:12px;color:var(--text);line-height:2;font-family:'SF Mono',Menlo,monospace;margin-bottom:12px">
+        【第 2 周反馈】7月14日-7月20日<br><br>
+        📊 <strong>自动统计</strong><br>
+        1. 训练完成：<span style="color:var(--accent)">4/5 天</span>（周四未完成）<br>
+        2. 骑行：<span style="color:var(--accent)">5 次，共 100 分钟</span><br>
+        3. 爬楼：<span style="color:var(--accent)">6 次，约 30 分钟</span><br>
+        4. 饮食打卡：早 <span style="color:var(--accent)">7/7</span> · 午 <span style="color:var(--accent)">7/7</span> · 晚 <span style="color:var(--accent)">6/7</span> · 加餐 <span style="color:var(--accent)">5/5</span><br>
+        5. 饮水：平均 <span style="color:var(--accent)">1.5L</span> / 目标 1.6L<br>
+        6. 咖啡：平均 <span style="color:var(--accent)">1.5 杯/天</span>，最晚 14:30<br>
+        7. 睡眠：平均 <span style="color:var(--accent)">6.8h</span> / 目标 ≥7h<br>
+        8. 体重：<span style="color:var(--accent)">53.6kg</span>（↓0.4kg）· 腰围：<span style="color:var(--accent)">71cm</span>（↓1cm）<br><br>
+        ✏️ <strong>需要补充</strong><br>
+        9. 最吃力的动作：_______<br>
+        10. 最轻松的动作：_______<br>
+        11. 肩颈感受：改善了 / 不变 / 加重了<br>
+        　  具体：_______<br>
+        12. 骨盆感受：站立时腰还酸吗？_______<br>
+        13. 精力/食欲/睡眠质量：_______
+      </div>
+
+      <button style="
+        background:var(--accent);color:#fff;border:none;
+        padding:14px 32px;border-radius:24px;font-size:14px;font-weight:600;
+        width:100%;cursor:pointer;font-family:-apple-system,sans-serif;
+        box-shadow:0 4px 14px rgba(125,169,124,0.35);
+        margin-bottom:8px;
+      " onclick="copySummary()">📋 一键复制摘要</button>
+
+      <div id="copy-confirm" style="text-align:center;font-size:12px;color:var(--accent);display:none;font-weight:600">
+        ✅ 已复制！粘贴到和教练的对话框即可
+      </div>
+
+      <div style="font-size:10px;color:var(--text2);text-align:center;margin-top:4px">
+        复制后粘贴给教练 → 教练分析 → 调整下周方案
+      </div>
+    </div>
+
+    <!-- Progress trend -->
+    <div class="card" style="margin-top:12px">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px">📈 体重 & 腰围趋势</div>
+      <div style="text-align:center;color:var(--text2);padding:20px;font-size:13px">
+        ─── 折线图区域 ───<br>
+        <span style="font-size:11px">随着每周录入数据，12周曲线自动绘制</span>
+      </div>
+    </div>
+  `;
+}
+
+// Copy summary function
+function copySummary() {
+  const text = `【第 2 周反馈】7月14日-7月20日
+
+📊 自动统计（App 生成）
+1. 训练完成：4/5 天（周四未完成）
+2. 骑行：5 次，共 100 分钟
+3. 爬楼：6 次，约 30 分钟
+4. 饮食打卡：早餐 7/7 · 午餐 7/7 · 晚餐 6/7 · 加餐 5/5
+5. 饮水：平均 1.5L / 目标 1.6L
+6. 咖啡：平均 1.5 杯/天，最晚 14:30
+7. 睡眠：平均 6.8h / 目标 ≥7h
+8. 体重：53.6kg（↓0.4kg）· 腰围：71cm（↓1cm）
+
+✏️ 需要补充（主观感受）
+9. 最吃力的动作：
+10. 最轻松的动作：
+11. 肩颈感受：改善了 / 不变 / 加重了
+　　具体：
+12. 骨盆感受：站立时腰还酸吗？
+13. 精力/食欲/睡眠质量：`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const confirm = document.getElementById('copy-confirm');
+    confirm.style.display = 'block';
+    setTimeout(() => { confirm.style.display = 'none'; }, 3000);
+  }).catch(() => {
+    alert('复制失败，请手动选中文字复制');
+  });
+}
+
+function renderScreen5() {
+  return `
+    <div class="screen-title">设置</div>
+    <div class="screen-subtitle">应用偏好</div>
+
+    <div class="card">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px">🔔 通知</div>
+      ${[
+        {label:'每日训练提醒', time:'19:30', on:true},
+        {label:'周日反馈提醒', time:'20:00', on:true},
+        {label:'组间休息震动', time:'结束时', on:true},
+      ].map(n => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div>
+            <div style="font-size:13px;color:var(--text);font-weight:500">${n.label}</div>
+            <div style="font-size:11px;color:var(--text2)">${n.time}</div>
+          </div>
+          <div style="width:44px;height:26px;border-radius:13px;background:${n.on?'var(--accent)':'var(--border)'};position:relative">
+            <div style="width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:3px;${n.on?'right:3px':'left:3px'};box-shadow:0 1px 2px rgba(0,0,0,0.15)"></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px">📱 关于</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8">
+        版本 1.0 · 纯本地 · 离线可用<br>
+        数据存储在您的设备上<br>
+        不上传任何信息到服务器
+      </div>
+    </div>
+  `;
+}
+
+// === RENDER ALL SCREENS ===
+document.getElementById('screen-container').innerHTML = `
+  <div id="screen-today">${renderScreen1()}</div>
+  <div class="divider">── 滑动查看更多 ──</div>
+  <div id="screen-week">${renderScreen2()}</div>
+  <div class="divider">── 滑动查看更多 ──</div>
+  <div id="screen-diet">${renderScreen3()}</div>
+  <div class="divider">── 滑动查看更多 ──</div>
+  <div id="screen-progress">${renderScreen4()}</div>
+  <div class="divider">── 滑动查看更多 ──</div>
+  <div id="screen-settings">${renderScreen5()}</div>
+  <div style="text-align:center;padding:40px;font-size:12px;color:var(--text2)">
+    ── 界面预览结束 ──<br>
+    <span style="font-size:10px">实际 App 中这些是独立页面，通过底部导航切换</span>
+  </div>
+`;
+
+function scrollToScreen(name) {
+  const el = document.getElementById('screen-' + name);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Default scroll to today
+setTimeout(() => scrollToScreen('today'), 100);
+
+// === EXERCISE DETAIL DATA ===
+const EXERCISES = {
+  'wall-angel': {
+    name: '靠墙天使',
+    category: '体态纠正',
+    svg: wallAngelSVG(),
+    steps: [
+      '背靠墙站立，脚后跟离墙约 15cm',
+      '后脑勺、上背、臀部贴紧墙面',
+      '双手举起，肘和手腕贴墙，呈「投降」姿势',
+      '缓慢沿墙向上滑动手臂，像做天使翅膀',
+      '到最高点停顿 1 秒，再缓慢下放至起始位'
+    ],
+    tips: '全程保持下背贴墙（手掌塞不进腰和墙之间）。如果手臂无法贴墙，说明胸椎活动度不够——不要强行贴，先做到自己能到的最高点。',
+    mistakes: '❌ 下背离墙 → 骨盆前倾代偿。❌ 耸肩 → 上斜方肌在帮倒忙。❌ 手臂弯曲 → 力线不对。',
+    breathing: '手臂上滑时呼气，下滑时吸气。',
+    sets: '3组 × 10次',
+    rest: '30秒',
+    why: '唤醒中下斜方肌和菱形肌，让肩胛骨重新学会「下沉后缩」。这是纠正肩内扣最重要的动作。'
+  },
+  'chest-stretch': {
+    name: '门框胸肌拉伸',
+    category: '体态纠正',
+    svg: catCowSVG(),
+    steps: [
+      '站在门框处，一侧前臂贴在门框边上',
+      '手肘与肩同高，前臂竖直',
+      '同侧脚向前迈一小步',
+      '身体缓慢向前转动，感受胸肌和肩前侧的拉伸',
+      '拉伸感在胸肌而非肩关节——如果肩关节痛立刻停止'
+    ],
+    tips: '拉伸时保持肩胛骨微微后缩。不要憋气，呼气时可以加深拉伸。',
+    mistakes: '❌ 手肘太高或太低 → 拉伸位置不对。❌ 身体转太快 → 肌肉来不及适应。',
+    breathing: '深呼吸，呼气时加深拉伸。',
+    sets: '2组 × 每侧30秒',
+    rest: '0秒（左右交替）',
+    why: '胸小肌紧张是肩部内扣的主要原因。长期伏案让胸肌缩短，把肩膀往前拽。'
+  },
+  'ytw': {
+    name: '俯卧 Y-T-W 字',
+    category: '体态纠正',
+    svg: wallAngelSVG(),
+    steps: [
+      '俯卧，额头下垫毛巾（保持颈椎中立）',
+      '双臂伸直举过头顶呈 Y 字形，拇指朝上',
+      '抬起双臂 5-8cm（不高，肩胛骨收紧即可）',
+      '缓慢下放，换 T 字形（双臂水平打开）',
+      '再换 W 字形（屈肘，手背朝上）'
+    ],
+    tips: '重点是肩胛骨的运动，不是手臂抬多高。下巴微收，眼望地面。每个字母之间不休息。',
+    mistakes: '❌ 头后仰看镜子 → 颈椎压力。❌ 手臂抬太高 → 腰部代偿。❌ 耸肩 → 练的是上斜方肌而非中下斜方肌。',
+    breathing: '抬起时呼气，下放时吸气。',
+    sets: '3组 × 每个字母5次（15次/组）',
+    rest: '30秒',
+    why: '用自重练习肩胛骨在 Y（上举）、T（水平）、W（后缩下沉）三个方向的独立控制。这是肩部健康的「ABC」。'
+  },
+  'dead-bug': {
+    name: '死虫式',
+    category: '核心',
+    svg: deadBugSVG(),
+    steps: [
+      '仰卧，双臂伸直指向天花板，双腿抬起屈膝 90°',
+      '下背紧贴地面——手可以塞到腰下感受是否离地',
+      '缓慢将对侧手和腿向地面下放（右手 + 左腿）',
+      '下放到手脚离地 5cm 时暂停 1 秒',
+      '缓慢收回，换另一侧'
+    ],
+    tips: '这是你最重要的核心动作。骨盆前倾的人做死虫式，第一要务是「腰不离开地面」。手脚下放的幅度不重要——腰贴地比手脚放得远重要 10 倍。',
+    mistakes: '❌ 下背离地 → 腹肌没发力，腰在代偿。❌ 动作太快 → 用惯性而非肌肉控制。❌ 憋气 → 腹横肌无法正常收缩。',
+    breathing: '手脚下放时吸气，收回时呼气。全程腹式呼吸。',
+    sets: '3组 × 每侧10次',
+    rest: '30秒',
+    why: '教会核心在四肢运动时保持骨盆稳定。骨盆前倾的人，腹横肌长期被抑制——死虫式是重新激活它的最佳动作。'
+  },
+  'glute-bridge': {
+    name: '臀桥',
+    category: '下肢',
+    svg: gluteBridgeSVG(),
+    steps: [
+      '仰卧屈膝，双脚与髋同宽，脚掌踩实',
+      '收紧腹部 → 夹紧臀部 → 将骨盆向上推',
+      '推到身体从肩到膝呈一条直线',
+      '顶峰夹臀停顿 2 秒',
+      '缓慢下放，臀部轻触地面后立刻再起'
+    ],
+    tips: '骨盆前倾的人做臀桥，启动顺序是：①先收腹（腹部收紧，骨盆微微后倾）→ ②再夹臀上推。不能用腰推——如果你感觉下背部酸而非臀部酸，说明腰在代偿。',
+    mistakes: '❌ 腰推而非臀推 → 练的是竖脊肌而非臀大肌。❌ 下巴上扬 → 颈椎压力。❌ 下放太快 → 离心阶段才是肌肉生长的关键。',
+    breathing: '上推时呼气，下放时吸气。',
+    sets: '4组 × 20次（骨盆前倾人群升级版）',
+    rest: '30秒',
+    why: '纠正骨盆前倾的基石动作。臀肌学会发力 → 髋屈肌自然松解 → 骨盆回到中立位。'
+  },
+  'squat': {
+    name: '自重深蹲',
+    category: '下肢',
+    svg: squatSVG(),
+    steps: [
+      '双脚与肩同宽或稍宽，脚尖微微朝外',
+      '启动前先收紧腹部 + 骨盆微微后倾（尾骨卷进去）',
+      '保持脊柱中立，像坐椅子一样臀部向后向下坐',
+      '下蹲到大腿与地面平行或稍高（不勉强深度）',
+      '脚跟蹬地站起，臀肌在顶部夹紧'
+    ],
+    tips: '骨盆前倾的人深蹲最容易犯的错：下蹲时腰椎反弓。纠正方法——下蹲前先收紧腹部，想象有人要打你肚子。全程保持这个收紧感。如果蹲不下去就先做浅蹲，动作质量比深度重要。',
+    mistakes: '❌ 腰椎反弓 → 肚子没收紧。❌ 膝盖内扣 → 膝盖对准第二脚趾。❌ 脚跟离地 → 踝关节活动度不够，先练浅蹲。',
+    breathing: '下蹲时吸气，站起时呼气。',
+    sets: '3组 × 10次',
+    rest: '30秒',
+    why: '全身最大肌群的复合动作。对代谢提升、骨骼密度、日常功能都有不可替代的作用。'
+  },
+  'bird-dog': {
+    name: '鸟狗式',
+    category: '核心',
+    svg: deadBugSVG(),
+    steps: [
+      '四足跪姿，手在肩下，膝在髋下',
+      '收紧腹部，骨盆保持中立（不前倾不后倾）',
+      '缓慢将对侧手和腿向两端延伸',
+      '腿只抬到与身体同高（不高），脚尖不超过臀部高度',
+      '停顿 2 秒，缓慢收回，换另一侧'
+    ],
+    tips: '骨盆前倾的人做鸟狗式，最大的问题是伸腿时骨盆跟着翻起来。在身旁放一面镜子侧面检查——骨盆不能动。腿抬到 10cm 但骨盆不动 > 腿抬到 30cm 但骨盆翻了。',
+    mistakes: '❌ 骨盆翻转 → 核心没收紧。❌ 伸腿太高 → 腰椎反弓。❌ 脖子后仰 → 颈椎不在中立位。',
+    breathing: '延伸时呼气，收回时吸气。',
+    sets: '2组 × 每侧8次（慢速，停顿3秒）',
+    rest: '30秒',
+    why: '训练躯干在四肢运动时保持稳定的能力——这是所有日常动作（走路、弯腰、拿东西）的基础模式。'
+  },
+  'plank': {
+    name: '平板支撑',
+    category: '核心',
+    svg: deadBugSVG(),
+    steps: [
+      '前臂撑地，肘在肩正下方',
+      '双腿伸直，脚尖着地，身体呈一条直线',
+      '收紧腹部 → 夹臀 → 骨盆微微后倾（尾骨卷进去）',
+      '下巴微收，眼睛看地面',
+      '保持腹式呼吸，不憋气'
+    ],
+    tips: '骨盆前倾的人做平板，最重要的是「不能塌腰」。宁可只做 15 秒标准版，也不要做 30 秒塌腰版。如果你不确定自己有没有塌腰——侧面放手机录像。',
+    mistakes: '❌ 塌腰 → 你最需要避免的。❌ 屁股翘太高 → 腹肌不参与。❌ 头后仰 → 颈椎代偿。',
+    breathing: '保持腹式呼吸，呼气和吸气各 3-4 秒。',
+    sets: '3组 × 20-30秒',
+    rest: '30秒',
+    why: '核心抗伸展耐力训练。不是练六块腹肌，而是练深层稳定肌群。'
+  },
+  'hip-flexor-stretch': {
+    name: '髋屈肌拉伸',
+    category: '活动度',
+    svg: catCowSVG(),
+    steps: [
+      '单膝跪地，后腿膝盖下垫毛巾',
+      '前腿屈膝 90°，双手放在前腿膝盖上',
+      '收紧腹部 + 夹臀（后腿那一侧的臀）',
+      '骨盆微微后倾——感受大腿前侧根部和髋前侧的拉伸',
+      '保持 30-45 秒，深呼吸'
+    ],
+    tips: '骨盆前倾人群中最重要的拉伸动作。拉伸感应该在大腿前侧根部（髋屈肌），而不是在下背部。如果你做的时候腰酸——说明骨盆没有后倾到位。',
+    mistakes: '❌ 骨盆前倾位拉伸 → 拉伸的是腰而非髋屈肌。❌ 身体前倾 → 同样在逃避免疫拉伸。',
+    breathing: '深呼吸，呼气时加深拉伸。',
+    sets: '2组 × 每侧45秒',
+    rest: '0秒（左右交替）',
+    why: '髂腰肌过紧是骨盆前倾的核心原因。久坐 8 小时 = 髂腰肌持续缩短 8 小时。这个拉伸是臀桥的反向搭档。'
+  },
+  'pelvic-clock': {
+    name: '骨盆时钟',
+    category: '活动度',
+    svg: gluteBridgeSVG(),
+    steps: [
+      '仰卧屈膝，双脚踩地',
+      '想象骨盆是一个钟面——肚脐是 12 点，耻骨是 6 点',
+      '缓慢将骨盆向前倾（12 点方向，腰离地）',
+      '再缓慢向后倾（6 点方向，腰贴地，尾骨卷起）',
+      '找到前倾和后倾之间的「中立位」——停留 10 秒'
+    ],
+    tips: '骨盆前倾的人通常感觉不到自己骨盆在哪。这个动作不是力量训练——是「感觉训练」。做 2 周后你应该能闭眼感知骨盆位置。',
+    mistakes: '❌ 动作太快 → 变成晃动而非感受。❌ 用腿推而非骨盆动 → 大腿发力而非核心发力。',
+    breathing: '前倾时吸气，后倾时呼气。',
+    sets: '2组 × 前后各5次',
+    rest: '0秒',
+    why: '骨盆前倾的人缺乏骨盆空间感知能力。建立这个感知是所有纠正训练的前提。'
+  }
+};
+
+// === MODAL LOGIC ===
+function openExercise(exerciseId) {
+  const ex = EXERCISES[exerciseId];
+  if (!ex) return;
+
+  const modal = document.getElementById('exercise-modal');
+  const content = document.getElementById('modal-content');
+
+  content.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-title">${ex.name}</div>
+    <span class="modal-category">${ex.category}</span>
+
+    <div class="modal-illustration-lg">${ex.svg}</div>
+
+    <div class="modal-section">
+      <h4>📋 动作步骤</h4>
+      ${ex.steps.map((s, i) => `
+        <div class="step">
+          <span class="step-num">${i + 1}</span>
+          <span>${s}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="modal-section">
+      <h4>🔑 关键要点</h4>
+      <div class="tip-box">${ex.tips}</div>
+    </div>
+
+    <div class="modal-section">
+      <h4>🚫 常见错误</h4>
+      <div class="mistake-box">${ex.mistakes}</div>
+    </div>
+
+    <div class="modal-section">
+      <h4>🫁 呼吸节奏</h4>
+      <div style="font-size:13px;color:var(--text);line-height:1.5">${ex.breathing}</div>
+    </div>
+
+    <div class="modal-section">
+      <h4>📊 训练参数</h4>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="background:var(--bg);padding:6px 12px;border-radius:8px;font-size:13px;font-family:'SF Mono',Menlo,monospace;color:var(--text)">${ex.sets}</span>
+        <span style="background:var(--bg);padding:6px 12px;border-radius:8px;font-size:13px;font-family:'SF Mono',Menlo,monospace;color:var(--text)">休息 ${ex.rest}</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h4>🧠 为什么做这个动作</h4>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">${ex.why}</div>
+    </div>
+
+    <button class="modal-close" onclick="closeModal()">关闭</button>
+  `;
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('exercise-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+</script>
+
+</body>
+</html>

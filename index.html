@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="居家训练">
+<meta name="theme-color" content="#FAF8F5">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<title>12周居家训练计划</title>
+<link rel="stylesheet" href="/css/style.css?v=2">
+</head>
+<body>
+
+<!-- Views -->
+<div id="view-today" class="view active"></div>
+<div id="view-week" class="view"></div>
+<div id="view-diet" class="view"></div>
+<div id="view-progress" class="view"></div>
+<div id="view-settings" class="view"></div>
+
+<!-- Modal container -->
+<div id="modal-container"></div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-view="today" onclick="navigate('today')">
+    <span class="nav-icon">📋</span> 训练
+  </button>
+  <button class="nav-item" data-view="week" onclick="navigate('week')">
+    <span class="nav-icon">📅</span> 周计划
+  </button>
+  <button class="nav-item" data-view="diet" onclick="navigate('diet')">
+    <span class="nav-icon">🥗</span> 饮食
+  </button>
+  <button class="nav-item" data-view="progress" onclick="navigate('progress')">
+    <span class="nav-icon">📊</span> 进度
+  </button>
+  <button class="nav-item" data-view="settings" onclick="navigate('settings')">
+    <span class="nav-icon">⚙️</span> 设置
+  </button>
+</nav>
+
+<!-- Scripts -->
+<script src="/js/storage.js"></script>
+<script src="/js/data.js"></script>
+<script src="/js/illustrations.js"></script>
+<script src="/js/nutrition.js"></script>
+<script src="/js/timer.js"></script>
+<script src="/js/app.js"></script>
+
+</body>
+</html>
