@@ -477,7 +477,7 @@ const ILLUSTRATIONS = {
   'downward-dog': downwardDogSVG
 };
 
-function getIllustration(exId) {
+export function getIllustration(exId) {
   const fn = ILLUSTRATIONS[exId];
   return fn ? fn() : wallAngelSVG(); // fallback
 }

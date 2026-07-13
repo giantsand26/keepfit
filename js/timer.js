@@ -4,7 +4,7 @@ let timerInterval = null;
 let timerSeconds = 0;
 let timerCallback = null;
 
-function startTimer(seconds, onTick, onComplete) {
+export function startTimer(seconds, onTick, onComplete) {
   stopTimer();
   timerSeconds = seconds;
   timerCallback = onComplete;
@@ -25,7 +25,7 @@ function startTimer(seconds, onTick, onComplete) {
   }, 1000);
 }
 
-function stopTimer() {
+export function stopTimer() {
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
@@ -34,15 +34,15 @@ function stopTimer() {
   timerCallback = null;
 }
 
-function getTimerSeconds() {
+export function getTimerSeconds() {
   return timerSeconds;
 }
 
-function isTimerRunning() {
+export function isTimerRunning() {
   return timerInterval !== null;
 }
 
-function formatTime(seconds) {
+export function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;

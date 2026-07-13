@@ -1,0 +1,17 @@
+{
+  "name": "keepfit",
+  "version": "1.1.0",
+  "description": "12周居家训练计划 PWA",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "esbuild js/app.js --bundle --outfile=dist/bundle.js --minify --sourcemap",
+    "dev": "esbuild js/app.js --bundle --outfile=dist/bundle.js --sourcemap --watch",
+    "lint": "eslint js/",
+    "lint:fix": "eslint js/ --fix"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "eslint": "^9.0.0"
+  }
+}

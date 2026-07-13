@@ -1,6 +1,6 @@
 /* nutrition.js — Daily diet templates and nutrition advice */
 
-const NUTRITION_PHASES = {
+export const NUTRITION_PHASES = {
   1: {
     phase: 1,
     weeks: '1-4周',
@@ -59,13 +59,13 @@ const DINNER_PROTEINS = {
   sun: { main: '老豆腐 200g 炖白菜', icon: '🫘' }
 };
 
-function getNutritionPhase(week) {
+export function getNutritionPhase(week) {
   if (week <= 4) return NUTRITION_PHASES[1];
   if (week <= 8) return NUTRITION_PHASES[2];
   return NUTRITION_PHASES[3];
 }
 
-function getTodayMeals(date, week) {
+export function getTodayMeals(date, week) {
   const dow = date.getDay(); // 0=Sun, 1=Mon ... 6=Sat
   const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const dayKey = dayNames[dow];
@@ -137,7 +137,7 @@ function getTodayMeals(date, week) {
   };
 }
 
-function getWeeklyShoppingList() {
+export function getWeeklyShoppingList() {
   return [
     '🐟 小黄鱼 8条（仅周二到周五午餐）',
     '🍗 鸡胸肉 400g',
@@ -159,7 +159,7 @@ function getWeeklyShoppingList() {
   ];
 }
 
-function getDailyActivity(date) {
+export function getDailyActivity(date) {
   const dow = date.getDay();
   const isWeekday = dow >= 1 && dow <= 5;
   const isSaturday = dow === 6;

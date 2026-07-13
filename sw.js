@@ -1,15 +1,21 @@
-const CACHE = 'workout-app-v4';
+const CACHE = 'workout-app-v5';
 const ASSETS = [
   './',
   './index.html',
   './preview.html',
   './css/style.css',
-  './js/app.js',
+  './js/storage.js',
   './js/data.js',
   './js/nutrition.js',
   './js/illustrations.js',
   './js/timer.js',
-  './js/storage.js',
+  './js/app.js',
+  './js/views/today.js',
+  './js/views/week.js',
+  './js/views/diet.js',
+  './js/views/progress.js',
+  './js/views/settings.js',
+  './js/views/modal.js',
   './manifest.json',
   './icons/icon-192.svg'
 ];
@@ -31,13 +37,12 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Only handle GET requests
   if (e.request.method !== 'GET') return;
 
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) {
-        // Cache hit — return cached, but also update cache in background
+        // Cache hit — stale-while-revalidate
         const fetchPromise = fetch(e.request).then(response => {
           if (response && response.status === 200 && response.type === 'basic') {
             const clone = response.clone();
@@ -45,7 +50,6 @@ self.addEventListener('fetch', e => {
           }
           return response;
         }).catch(() => {});
-        // Don't wait for the network update
         return cached;
       }
       // Cache miss — try network
@@ -56,7 +60,7 @@ self.addEventListener('fetch', e => {
         return response;
       });
     }).catch(() => {
-      // Offline and not in cache — return the main page for navigation requests
+      // Offline fallback
       if (e.request.mode === 'navigate') {
         return caches.match('./index.html');
       }

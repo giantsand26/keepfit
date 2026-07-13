@@ -1,8 +1,10 @@
 /* data.js — 12-week training plan */
 
+import { getSetting, saveSetting } from './storage.js';
+
 // Maps day of week (0=Sun, 1=Mon, ... 6=Sat) to plan day index (1-5)
 // Monday=day1, Tuesday=day2, Wednesday=day3, Thursday=day4, Friday=day5
-function getPlanDay(date) {
+export function getPlanDay(date) {
   const dow = date.getDay(); // 0=Sun
   if (dow === 0 || dow === 6) return null; // rest day
   return dow; // 1=Mon=day1, 2=Tue=day2, ... 5=Fri=day5
@@ -11,7 +13,7 @@ function getPlanDay(date) {
 // Plan start date — persisted to IndexedDB on first launch
 let _cachedPlanStart = null;
 
-async function getPlanStartDate() {
+export async function getPlanStartDate() {
   if (_cachedPlanStart) return _cachedPlanStart;
   try {
     const saved = await getSetting('planStartDate', null);
@@ -20,10 +22,8 @@ async function getPlanStartDate() {
       return _cachedPlanStart;
     }
   } catch(e) {
-    // IndexedDB unavailable — use computed date as fallback
     console.warn('IndexedDB unavailable, using computed start date:', e);
   }
-  // Compute and try to save (non-critical if save fails)
   const now = new Date();
   const dow = now.getDay();
   const diff = dow === 0 ? 6 : dow - 1;
@@ -35,21 +35,21 @@ async function getPlanStartDate() {
   return monday;
 }
 
-async function getWeekNumber(date) {
+export async function getWeekNumber(date) {
   const startDate = await getPlanStartDate();
   const diff = date - startDate;
   const week = Math.floor(diff / (7 * 86400000)) + 1;
   return Math.max(1, Math.min(12, week));
 }
 
-function getPhase(week) {
+export function getPhase(week) {
   if (week <= 4) return 1;
   if (week <= 8) return 2;
   return 3;
 }
 
 // === Exercise definitions with metadata ===
-const EXERCISES = {
+export const EXERCISES = {
   'wall-angel': {
     id: 'wall-angel', name: '靠墙天使', category: '体态纠正',
     instructions: [
@@ -387,13 +387,11 @@ const EXERCISES = {
 };
 
 // === 12-Week Plan Data ===
-function getDayPlan(week, day) {
+export function getDayPlan(week, day) {
   const phase = getPhase(week);
-  const dayNames = ['', '周一：体态纠正', '周二：下肢+核心', '周三：背部主导', '周四：全身循环', '周五：活动度+核心'];
 
-  // Base exercises for each day across phases
   const plans = {
-    1: { // Monday - Posture
+    1: {
       theme: '体态纠正日',
       exercises: [
         { exId: 'wall-angel', sets: 3, reps: '10次', restSeconds: 30 },
@@ -403,7 +401,7 @@ function getDayPlan(week, day) {
         { exId: 'hip-flexor-stretch', sets: 2, reps: '每侧45秒', restSeconds: 0 }
       ]
     },
-    2: { // Tuesday - Lower body + core
+    2: {
       theme: '下肢+核心日',
       exercises: [
         { exId: 'glute-bridge', sets: 4, reps: '20次', restSeconds: 30 },
@@ -412,7 +410,7 @@ function getDayPlan(week, day) {
         { exId: 'plank', sets: 3, reps: '20-30秒', restSeconds: 30 }
       ]
     },
-    3: { // Wednesday - Back
+    3: {
       theme: '背部主导日',
       exercises: [
         { exId: 'prone-raise', sets: 3, reps: '10次', restSeconds: 30 },
@@ -421,7 +419,7 @@ function getDayPlan(week, day) {
         { exId: 'cat-cow', sets: 2, reps: '8次', restSeconds: 0 }
       ]
     },
-    4: { // Thursday - Full body circuit
+    4: {
       theme: '全身循环日',
       isCircuit: true,
       rounds: 2,
@@ -433,7 +431,7 @@ function getDayPlan(week, day) {
         { exId: 'dead-bug', reps: '每侧6次' }
       ]
     },
-    5: { // Friday - Mobility + core
+    5: {
       theme: '活动度+核心日',
       exercises: [
         { exId: 'pelvic-clock', sets: 2, reps: '前后各5次', restSeconds: 0 },
@@ -448,25 +446,17 @@ function getDayPlan(week, day) {
   const base = plans[day];
   if (!base) return null;
 
-  // Phase-specific modifications
-  if (phase === 2) {
-    return getPhase2Plan(base, day);
-  } else if (phase === 3) {
-    return getPhase3Plan(base, day);
-  }
+  if (phase === 2) return getPhase2Plan(base, day);
+  if (phase === 3) return getPhase3Plan(base, day);
   return base;
 }
 
 function getPhase2Plan(base, day) {
   const modified = JSON.parse(JSON.stringify(base));
-
   if (day === 1) {
-    // Add incline pushup
     modified.exercises.splice(3, 0, { exId: 'incline-pushup', sets: 3, reps: '8-10次', restSeconds: 30 });
-    // Increase wall angel
     modified.exercises[0].reps = '12次';
     modified.exercises[0].restSeconds = 20;
-    // Increase dead bug
     modified.exercises[4].reps = '每侧12次';
   } else if (day === 2) {
     modified.exercises[0] = { exId: 'single-leg-bridge', sets: 3, reps: '每侧10次', restSeconds: 30 };
@@ -483,14 +473,12 @@ function getPhase2Plan(base, day) {
     modified.exercises[3].reps = '30-40秒';
     modified.exercises[4].reps = '每侧20秒';
   }
-
   modified.theme = base.theme + '（强化）';
   return modified;
 }
 
 function getPhase3Plan(base, day) {
   const modified = JSON.parse(JSON.stringify(base));
-
   if (day === 1) {
     modified.exercises[0] = { exId: 'wall-angel', sets: 3, reps: '15次（极度慢速）', restSeconds: 20 };
     modified.exercises[2] = { exId: 'ytw', sets: 3, reps: '每字母10次', restSeconds: 20 };
@@ -531,6 +519,5 @@ function getPhase3Plan(base, day) {
     ];
     modified.theme = '流动训练+恢复';
   }
-
   return modified;
 }
