@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function registerSW() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 }
 
@@ -537,19 +537,60 @@ async function renderDietView() {
     </div>`;
 
   document.getElementById('view-diet').innerHTML = html;
+
+  // Load persisted water data for today
+  loadWaterData();
 }
 
-function addWater(ml) {
+async function loadWaterData() {
+  const dateKey = today().toISOString().split('T')[0];
+  let water = 0;
+  try {
+    const mealData = await getMeal(dateKey);
+    if (mealData && typeof mealData.water === 'number') {
+      water = mealData.water;
+    }
+  } catch(e) {
+    // Fallback to sessionStorage
+    try {
+      const val = sessionStorage.getItem('water_' + dateKey);
+      if (val) water = parseFloat(val);
+    } catch(_) {}
+  }
+
+  if (water > 0) {
+    const el = document.getElementById('water-drank');
+    const fill = document.getElementById('water-fill');
+    if (el) el.textContent = water + 'L';
+    if (fill) {
+      const phase = _cachedWeek ? getNutritionPhase(_cachedWeek) : NUTRITION_PHASES[1];
+      const pct = Math.min(100, (water / phase.dailyWater) * 100);
+      fill.style.width = pct + '%';
+    }
+  }
+}
+
+async function addWater(ml) {
   const L = ml / 1000;
   const el = document.getElementById('water-drank');
   const fill = document.getElementById('water-fill');
   if (!el || !fill) return;
 
+  const dateKey = today().toISOString().split('T')[0];
+
+  // Load existing water + meal data, then merge
   let current = parseFloat(el.textContent) || 0;
   current = Math.round((current + L) * 10) / 10;
   el.textContent = current + 'L';
-  // Persist in session
-  _waterDrank = current;
+
+  // Persist to IndexedDB so it survives refresh / offline→online
+  try {
+    const existing = await getMeal(dateKey);
+    await saveMeal(dateKey, { ...existing, water: current });
+  } catch(e) {
+    // Fallback: also save to sessionStorage so at least tab refresh survives
+    try { sessionStorage.setItem('water_' + dateKey, current); } catch(_) {}
+  }
 
   // Use cached week or default phase 1
   const phase = _cachedWeek ? getNutritionPhase(_cachedWeek) : NUTRITION_PHASES[1];
@@ -559,8 +600,6 @@ function addWater(ml) {
   if (navigator.vibrate) navigator.vibrate(50);
 }
 
-// Water tracking session variable
-let _waterDrank = 0;
 let _cachedWeek = null;
 
 // === PROGRESS VIEW ===
